@@ -12,6 +12,8 @@
       </div>
       <div class="slds-p-around_small">
         <lightning-combobox
+          label="From"
+          placeholder="Select Currency"
           options={picklistOptions}
           value={selectedFirstCurrency}
           onchange={handleFirstPicChange}
@@ -20,6 +22,8 @@
       </div>
       <div class="slds-p-around_small">
         <lightning-combobox
+          label="To"
+          placeholder="Select Currency"
           options={picklistOptions}
           value={selectedSecCurrency}
           onchange={handleSecPicChange}

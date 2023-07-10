@@ -29,4 +29,12 @@ export default class MyComponent extends LightningElement {
     };
     publish(this.messageContext, CURRENCY_UPDATED_CHANNEL, payload);
   }
+
+  connectedCallback() {
+    let rightNow = new Date();
+    rightNow.setMinutes(
+      new Date().getMinutes() - new Date().getTimezoneOffset()
+    );
+    this.selectedDate = rightNow.toISOString().slice(0, 10);
+  }
 }
