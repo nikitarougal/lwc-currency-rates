@@ -1,0 +1,47 @@
+<template>
+  <lightning-card title="Currency Converter">
+    <div class="slds-var-m-around_medium">
+      <div class="slds-p-around_small">
+        <lightning-input
+          label="Amount"
+          type="number"
+          placeholder="10"
+          value={currencyAmountInput}
+          onchange={handleCurrencyAmountInput}
+        ></lightning-input>
+      </div>
+      <div class="slds-p-around_small">
+        <lightning-combobox
+          options={picklistOptions}
+          value={selectedFirstCurrency}
+          onchange={handleFirstPicChange}
+        >
+        </lightning-combobox>
+      </div>
+      <div class="slds-p-around_small">
+        <lightning-combobox
+          options={picklistOptions}
+          value={selectedSecCurrency}
+          onchange={handleSecPicChange}
+        >
+        </lightning-combobox>
+      </div>
+      <div class="slds-p-around_small">
+        <lightning-button
+          variant="brand"
+          label="Convert"
+          onclick={handleConvertion}
+        >
+        </lightning-button>
+      </div>
+      <template lwc:if={calculatedSecCurrency}>
+        <div class="slds-p-around_small">
+          <p>
+            {currencyAmountInput} {selectedFirstCurrency} =
+            {calculatedSecCurrency} {selectedSecCurrency}
+          </p>
+        </div>
+      </template>
+    </div>
+  </lightning-card>
+</template>

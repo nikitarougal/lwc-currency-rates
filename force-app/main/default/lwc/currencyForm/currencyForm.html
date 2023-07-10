@@ -1,0 +1,32 @@
+<template>
+  <lightning-card title="Select Currency &amp; Date">
+    <div class="slds-var-m-around_medium">
+      <lightning-combobox
+        class="slds-p-around_small"
+        label="Currency"
+        options={picklistOptions}
+        value={selectedcurrency}
+        placeholder="Select Currency"
+        onchange={handleCurrencyChange}
+      >
+      </lightning-combobox>
+
+      <lightning-input
+        class="slds-p-around_small"
+        type="date"
+        label="Select a Date"
+        value={selectedDate}
+        onchange={handleDateChange}
+      >
+      </lightning-input>
+
+      <lightning-button
+        variant="brand"
+        class="slds-p-around_medium"
+        label="Get Rates"
+        onclick={handleButtonClick}
+      >
+      </lightning-button>
+    </div>
+  </lightning-card>
+</template>

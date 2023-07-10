@@ -1,0 +1,10 @@
+<template>
+  <lightning-card title="Currency Table: Your Currency">
+    <div class="slds-var-m-around_medium">
+      <template lwc:if={rates}>
+        <lightning-datatable data={rates} columns={columns} key-field="Id">
+        </lightning-datatable>
+      </template>
+    </div>
+  </lightning-card>
+</template>
