@@ -1,6 +1,7 @@
 import { LightningElement, track, wire } from "lwc";
 import { publish, MessageContext } from "lightning/messageService";
 import CURRENCY_UPDATED_CHANNEL from "@salesforce/messageChannel/Currency_Updated__c";
+import { getCurrentDate } from "c/utils";
 
 export default class MyComponent extends LightningElement {
   @track picklistOptions = [
@@ -31,10 +32,6 @@ export default class MyComponent extends LightningElement {
   }
 
   connectedCallback() {
-    let rightNow = new Date();
-    rightNow.setMinutes(
-      new Date().getMinutes() - new Date().getTimezoneOffset()
-    );
-    this.selectedDate = rightNow.toISOString().slice(0, 10);
+    this.selectedDate = getCurrentDate();
   }
 }

@@ -1,9 +1,16 @@
 <template>
   <lightning-card>
     <h3 slot="title">
-      <lightning-icon icon-name="utility:update" size="small"></lightning-icon>
+      <lightning-icon icon-name="action:update" size="small"></lightning-icon>
       Currency Table: {baseCurrencyName}
     </h3>
+    <div class="slds-text-align_right slds-m-right_medium">
+      <lightning-formatted-rich-text
+        style="font-weight: bold"
+        value={selectedDate}
+      >
+      </lightning-formatted-rich-text>
+    </div>
     <div class="slds-var-m-around_medium">
       <template if:true={rates}>
         <lightning-datatable
@@ -13,6 +20,12 @@
         >
         </lightning-datatable>
       </template>
+    </div>
+    <div if:true={isLoading} class="slds-var-m-around_medium">
+      <lightning-spinner
+        alternative-text="Loading"
+        size="medium"
+      ></lightning-spinner>
     </div>
   </lightning-card>
 </template>
