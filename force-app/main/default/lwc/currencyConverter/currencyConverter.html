@@ -14,7 +14,7 @@
         <lightning-combobox
           label="From"
           placeholder="Select Currency"
-          options={picklistOptions}
+          options={currencyPicklistOptions}
           value={selectedFirstCurrency}
           onchange={handleFirstPicChange}
         >
@@ -24,7 +24,7 @@
         <lightning-combobox
           label="To"
           placeholder="Select Currency"
-          options={picklistOptions}
+          options={currencyPicklistOptions}
           value={selectedSecCurrency}
           onchange={handleSecPicChange}
         >
@@ -35,6 +35,7 @@
           variant="brand"
           label="Convert"
           onclick={handleConvertion}
+          disabled={disableButton}
         >
         </lightning-button>
       </div>

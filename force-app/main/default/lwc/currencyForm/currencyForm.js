@@ -1,14 +1,10 @@
 import { LightningElement, track, wire } from "lwc";
 import { publish, MessageContext } from "lightning/messageService";
 import CURRENCY_UPDATED_CHANNEL from "@salesforce/messageChannel/Currency_Updated__c";
-import { getCurrentDate } from "c/utils";
+import { picklistOptions, getCurrentDate } from "c/utils";
 
 export default class MyComponent extends LightningElement {
-  @track picklistOptions = [
-    { label: "USD / Dollar", value: "USD" },
-    { label: "EUR / Euro", value: "EUR" },
-    { label: "CAD / Canadian Dollar", value: "CAD" }
-  ];
+  @track currencyPicklistOptions = picklistOptions;
   @track selectedCurrency;
   @track selectedDate;
 

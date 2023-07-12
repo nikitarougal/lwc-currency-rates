@@ -1,8 +1,9 @@
 import { LightningElement, wire, track } from "lwc";
-import { subscribe, MessageContext } from "lightning/messageService";
+import { publish, subscribe, MessageContext } from "lightning/messageService";
 import CURRENCY_UPDATED_CHANNEL from "@salesforce/messageChannel/Currency_Updated__c";
+import RATES_UPDATED_CHANNEL from "@salesforce/messageChannel/Rates_Updated__c";
 import getExchangeRates from "@salesforce/apex/ExchangeRateCallout.getExchangeRates";
-import { getCurrencyList, getCurrentDate } from "c/utils";
+import { picklistOptions, getCurrencyList, getCurrentDate } from "c/utils";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
 
 const COLS = [
@@ -11,12 +12,10 @@ const COLS = [
   { label: "Rate", fieldName: "Rate" }
 ];
 
-const basicCurrencies = ["USD", "EUR", "CAD"];
-
 export default class DatatableCustomDataType extends LightningElement {
   columns = COLS;
   currencyList = getCurrencyList();
-  basicCurrencies = basicCurrencies;
+  basicCurrencies = picklistOptions;
   @track rates = [];
   @track selectedCurrency = "EUR";
   @track selectedDate;
@@ -50,10 +49,7 @@ export default class DatatableCustomDataType extends LightningElement {
       });
       const baseCurrency = result.base;
       const rates = Object.entries(result.rates).map(([currency, rate]) => {
-        if (
-          this.basicCurrencies.includes(currency) &&
-          currency !== baseCurrency
-        ) {
+        if (this.checkIfValueExists(currency) && currency !== baseCurrency) {
           return {
             Currency: currency,
             CurrencyName: this.currencyList[currency],
@@ -79,6 +75,12 @@ export default class DatatableCustomDataType extends LightningElement {
       );
     } finally {
       this.isLoading = false; // Hide the spinner
+      if (this.selectedDate === getCurrentDate()) {
+        const payload = {
+          rates: this.rates
+        };
+        publish(this.messageContext, RATES_UPDATED_CHANNEL, payload);
+      }
     }
   }
 
@@ -130,6 +132,10 @@ export default class DatatableCustomDataType extends LightningElement {
     const rateObj = this.rates.find((rate) => rate.Currency === currency);
     return rateObj ? rateObj.Rate : null;
   }
+
+  checkIfValueExists = (value) => {
+    return this.basicCurrencies.some((option) => option.value === value);
+  };
 
   disconnectedCallback() {
     this.subscription.unsubscribe();

@@ -1,3 +1,9 @@
+const picklistOptions = [
+  { label: "USD / Dollar", value: "USD" },
+  { label: "EUR / Euro", value: "EUR" },
+  { label: "CAD / Canadian Dollar", value: "CAD" }
+];
+
 const getCurrencyList = () => {
   return {
     AFA: "Afghan Afghani",
@@ -178,4 +184,4 @@ const getCurrentDate = () => {
   return currentDate;
 };
 
-export { getCurrencyList, getCurrentDate };
+export { picklistOptions, getCurrencyList, getCurrentDate };

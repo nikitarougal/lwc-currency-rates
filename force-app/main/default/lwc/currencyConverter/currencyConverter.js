@@ -1,21 +1,39 @@
-import { LightningElement, track } from "lwc";
-
-const rates = [
-  { Id: "1", Currency: "USD", CurrencyName: "Dollar", Rate: 1 },
-  { Id: "2", Currency: "EUR", CurrencyName: "Euro", Rate: 0.9 },
-  { Id: "3", Currency: "CAD", CurrencyName: "Canadian Dollar", Rate: 1.3 }
-];
+import { LightningElement, wire, track } from "lwc";
+import { picklistOptions } from "c/utils";
+import { subscribe, MessageContext } from "lightning/messageService";
+import RATES_UPDATED_CHANNEL from "@salesforce/messageChannel/Rates_Updated__c";
 
 export default class MyComponent extends LightningElement {
-  @track picklistOptions = [
-    { label: "USD / Dollar", value: "USD" },
-    { label: "EUR / Euro", value: "EUR" },
-    { label: "CAD / Canadian Dollar", value: "CAD" }
-  ];
+  subscription = null;
+  @track currencyPicklistOptions = picklistOptions;
   @track selectedFirstCurrency;
   @track selectedSecCurrency;
   @track currencyAmountInput;
   @track calculatedSecCurrency;
+  @track rates = [];
+
+  @wire(MessageContext)
+  messageContext;
+
+  get disableButton() {
+    return this.rates.length === 0;
+  }
+
+  subscribeToMessageChannel() {
+    this.subscription = subscribe(
+      this.messageContext,
+      RATES_UPDATED_CHANNEL,
+      (message) => this.handleMessage(message)
+    );
+  }
+
+  handleMessage(message) {
+    this.rates = message.rates;
+  }
+
+  connectedCallback() {
+    this.subscribeToMessageChannel();
+  }
 
   handleFirstPicChange(event) {
     this.selectedFirstCurrency = event.detail.value;
@@ -38,7 +56,7 @@ export default class MyComponent extends LightningElement {
   }
 
   getRateByCurrency(currency) {
-    const rateObj = rates.find((rate) => rate.Currency === currency);
+    const rateObj = this.rates.find((rate) => rate.Currency === currency);
     return rateObj ? rateObj.Rate : null;
   }
 }
