@@ -3,7 +3,12 @@ import { publish, subscribe, MessageContext } from "lightning/messageService";
 import CURRENCY_UPDATED_CHANNEL from "@salesforce/messageChannel/Currency_Updated__c";
 import RATES_UPDATED_CHANNEL from "@salesforce/messageChannel/Rates_Updated__c";
 import getExchangeRates from "@salesforce/apex/ExchangeRateCallout.getExchangeRates";
-import { picklistOptions, getCurrencyList, getCurrentDate } from "c/utils";
+import {
+  getPicklistOptions,
+  updatePicklistOptions,
+  getCurrencyList,
+  getCurrentDate
+} from "c/utils";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
 
 const COLS = [
@@ -13,9 +18,11 @@ const COLS = [
 ];
 
 export default class DatatableCustomDataType extends LightningElement {
+  subscription = null;
   columns = COLS;
   currencyList = getCurrencyList();
-  basicCurrencies = picklistOptions;
+  @track basicCurrencies = getPicklistOptions();
+  currencyListOptions;
   @track rates = [];
   @track selectedCurrency = "EUR";
   @track selectedDate;
@@ -23,7 +30,6 @@ export default class DatatableCustomDataType extends LightningElement {
 
   @wire(MessageContext)
   messageContext;
-  subscription;
 
   get baseCurrencyName() {
     return this.currencyList[this.selectedCurrency];
@@ -33,6 +39,7 @@ export default class DatatableCustomDataType extends LightningElement {
     this.selectedDate = getCurrentDate();
     this.subscribeToMessageChannel();
     this.loadData();
+    this.currencyListOptions = this.getCurrencyListOptions();
   }
 
   async loadData() {
@@ -77,7 +84,8 @@ export default class DatatableCustomDataType extends LightningElement {
       this.isLoading = false; // Hide the spinner
       if (this.selectedDate === getCurrentDate()) {
         const payload = {
-          rates: this.rates
+          rates: this.rates,
+          picklist: false
         };
         publish(this.messageContext, RATES_UPDATED_CHANNEL, payload);
       }
@@ -124,8 +132,24 @@ export default class DatatableCustomDataType extends LightningElement {
         }
       });
       this.rates = [...this.rates];
-      console.log(this.rates);
     }
+  }
+
+  addNewCurrency(event) {
+    const newCurrency = event.detail.value;
+    const newCurrencyName = this.currencyList[newCurrency];
+    const newOption = {
+      label: `${newCurrency} / ${newCurrencyName}`,
+      value: newCurrency
+    };
+    updatePicklistOptions(newOption);
+
+    const payload = {
+      picklist: true
+    };
+    publish(this.messageContext, RATES_UPDATED_CHANNEL, payload);
+
+    this.loadData();
   }
 
   getRateByCurrency(currency) {
@@ -133,11 +157,17 @@ export default class DatatableCustomDataType extends LightningElement {
     return rateObj ? rateObj.Rate : null;
   }
 
-  checkIfValueExists = (value) => {
+  checkIfValueExists(value) {
     return this.basicCurrencies.some((option) => option.value === value);
-  };
+  }
 
-  disconnectedCallback() {
-    this.subscription.unsubscribe();
+  getCurrencyListOptions() {
+    const currencyListOptions = Object.entries(this.currencyList).map(
+      ([value, label]) => ({
+        label: `${value} / ${label}`,
+        value: value
+      })
+    );
+    return currencyListOptions;
   }
 }

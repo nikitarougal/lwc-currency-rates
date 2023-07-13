@@ -1,11 +1,10 @@
 import { LightningElement, wire, track } from "lwc";
-import { picklistOptions } from "c/utils";
+import { getCurrencyPicklistOptions } from "c/utils";
 import { subscribe, MessageContext } from "lightning/messageService";
 import RATES_UPDATED_CHANNEL from "@salesforce/messageChannel/Rates_Updated__c";
 
 export default class MyComponent extends LightningElement {
   subscription = null;
-  @track currencyPicklistOptions = picklistOptions;
   @track selectedFirstCurrency;
   @track selectedSecCurrency;
   @track currencyAmountInput;
@@ -14,6 +13,8 @@ export default class MyComponent extends LightningElement {
 
   @wire(MessageContext)
   messageContext;
+
+  currencyPicklistOptions = getCurrencyPicklistOptions();
 
   get disableButton() {
     return this.rates.length === 0;
@@ -28,7 +29,11 @@ export default class MyComponent extends LightningElement {
   }
 
   handleMessage(message) {
-    this.rates = message.rates;
+    if (message.picklist) {
+      this.currencyPicklistOptions = getCurrencyPicklistOptions();
+    } else {
+      this.rates = message.rates;
+    }
   }
 
   connectedCallback() {

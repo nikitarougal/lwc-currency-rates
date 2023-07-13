@@ -1,12 +1,27 @@
 const picklistOptions = [
-  { label: "USD / Dollar", value: "USD" },
   { label: "EUR / Euro", value: "EUR" },
+  { label: "USD / Dollar", value: "USD" },
   { label: "CAD / Canadian Dollar", value: "CAD" }
 ];
 
+let currencyPicklistOptions = [...picklistOptions];
+
+const getPicklistOptions = () => {
+  return picklistOptions;
+};
+
+const getCurrencyPicklistOptions = () => {
+  return currencyPicklistOptions;
+};
+
+const updatePicklistOptions = (newOption) => {
+  picklistOptions.push(newOption);
+  currencyPicklistOptions = [...picklistOptions];
+};
+
 const getCurrencyList = () => {
   return {
-    AFA: "Afghan Afghani",
+    AFN: "Afghan Afghani",
     ALL: "Albanian Lek",
     DZD: "Algerian Dinar",
     AOA: "Angolan Kwanza",
@@ -184,4 +199,10 @@ const getCurrentDate = () => {
   return currentDate;
 };
 
-export { picklistOptions, getCurrencyList, getCurrentDate };
+export {
+  getPicklistOptions,
+  getCurrencyPicklistOptions,
+  updatePicklistOptions,
+  getCurrencyList,
+  getCurrentDate
+};

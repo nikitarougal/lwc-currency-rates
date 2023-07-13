@@ -21,6 +21,23 @@
         </lightning-datatable>
       </template>
     </div>
+    <lightning-layout>
+      <lightning-layout-item
+        size="3"
+        flexibility="auto"
+        class="slds-var-m-around_medium"
+      >
+        <lightning-combobox
+          label="Add Currency"
+          options={currencyListOptions}
+          value={selectedcurrency}
+          placeholder="Select Currency"
+          onchange={addNewCurrency}
+        >
+        </lightning-combobox>
+      </lightning-layout-item>
+    </lightning-layout>
+
     <div if:true={isLoading} class="slds-var-m-around_medium">
       <lightning-spinner
         alternative-text="Loading"
