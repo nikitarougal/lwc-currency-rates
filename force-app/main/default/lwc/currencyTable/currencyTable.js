@@ -51,6 +51,7 @@ export default class DatatableCustomDataType extends LightningElement {
     this.isLoading = true; // Show the spinner
 
     try {
+      // Process the result and update the rates
       const result = await getExchangeRates({
         currencyDate: this.selectedDate
       });
@@ -82,6 +83,7 @@ export default class DatatableCustomDataType extends LightningElement {
       );
     } finally {
       this.isLoading = false; // Hide the spinner
+      // Send rates currencyConverter
       if (this.selectedDate === getCurrentDate()) {
         const payload = {
           rates: this.rates,
@@ -119,7 +121,7 @@ export default class DatatableCustomDataType extends LightningElement {
       this.handleRatesUpdate();
     }
   }
-
+  // recalculate rates if the base currency has changed
   handleRatesUpdate() {
     const prevBaseRate = this.getRateByCurrency(this.selectedCurrency);
     if (prevBaseRate !== 1 && prevBaseRate !== 0) {
@@ -142,8 +144,9 @@ export default class DatatableCustomDataType extends LightningElement {
       label: `${newCurrency} / ${newCurrencyName}`,
       value: newCurrency
     };
+    // Update the picklistOptions with the new values
     updatePicklistOptions(newOption);
-
+    // Publish a message to notify currencyForm and currencyConverter to update the picklist options
     const payload = {
       picklist: true
     };
@@ -160,7 +163,7 @@ export default class DatatableCustomDataType extends LightningElement {
   checkIfValueExists(value) {
     return this.basicCurrencies.some((option) => option.value === value);
   }
-
+  // form options for the combobox for Add New currency functionality
   getCurrencyListOptions() {
     const currencyListOptions = Object.entries(this.currencyList).map(
       ([value, label]) => ({
