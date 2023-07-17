@@ -2,6 +2,8 @@
 
 The Currency App is a Salesforce Lightning Web Component (LWC) application that allows users to retrieve currency rates, display them in a table, and convert currency amounts using current exchange rates.
 
+![image](https://github.com/nikitarougal/lwc-currency-rates/assets/77426901/dc282fa1-2693-4432-8ed0-fd7c636267b4)
+
 ## Components
 
 The app consists of the following LWC components:
