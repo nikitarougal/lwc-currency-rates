@@ -1,18 +1,44 @@
-# Salesforce DX Project: Next Steps
+# Currency App
 
-Now that you’ve created a Salesforce DX project, what’s next? Here are some documentation resources to get you started.
+The Currency App is a Salesforce Lightning Web Component (LWC) application that allows users to retrieve currency rates, display them in a table, and convert currency amounts using current exchange rates.
 
-## How Do You Plan to Deploy Your Changes?
+## Components
 
-Do you want to deploy a set of changes, or create a self-contained application? Choose a [development model](https://developer.salesforce.com/tools/vscode/en/user-guide/development-models).
+The app consists of the following LWC components:
 
-## Configure Your Salesforce DX Project
+1. **currencyForm**: Allows users to choose a base currency and date to retrieve currency rates.
 
-The `sfdx-project.json` file contains useful configuration information for your project. See [Salesforce DX Project Configuration](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_ws_config.htm) in the _Salesforce DX Developer Guide_ for details about this file.
+2. **currencyTable**: Displays currency rates in a table format. Users can also add new currencies to the table using a combobox.
 
-## Read All About It
+3. **currencyConverter**: Allows users to convert a specified amount of currency to other currencies using the current exchange rates.
 
-- [Salesforce Extensions Documentation](https://developer.salesforce.com/tools/vscode/)
-- [Salesforce CLI Setup Guide](https://developer.salesforce.com/docs/atlas.en-us.sfdx_setup.meta/sfdx_setup/sfdx_setup_intro.htm)
-- [Salesforce DX Developer Guide](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_intro.htm)
-- [Salesforce CLI Command Reference](https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference.htm)
+## Apex Class
+
+The app uses an Apex class to perform a callout to retrieve currency rates from an external API. The retrieved rates are saved to the Log object and returned as a response.
+
+## Prerequisites
+
+- Salesforce org with Lightning Experience enabled.
+- API access and permissions to perform callouts and access the Log object.
+
+## Installation
+
+To use the Currency App in your Salesforce org, follow these steps:
+
+1. Install the Currency App package by clicking on the following link: [Package Installation URL](https://login.salesforce.com/packaging/installPackage.apexp?p0=04t5h000000yWThAAM).
+
+2. Assign the necessary permissions to the user profile to access the Currency App components and perform callouts.
+
+## Usage
+
+1. Add the **currencyForm** component to a Lightning page. This component allows users to choose a base currency and date to retrieve currency rates.
+
+2. Add the **currencyTable** component to a Lightning page. This component displays the retrieved currency rates in a table format. Users can also add new currencies to the table using the provided combobox.
+
+3. Add the **currencyConverter** component to a Lightning page. This component allows users to convert a specified amount of currency to other currencies using the current exchange rates.
+
+4. Customize the components as per your requirements and styling preferences.
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
